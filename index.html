@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPT 슬라이드 쇼</title>
+    <style>
+        /* 기본 스타일 */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .slideshow-container {
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        .slide {
+            min-width: 100%;
+            box-sizing: border-box;
+        }
+        .slide img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="slideshow-container">
+    <div class="slides" id="slides">
+        <!-- PPT 캡처 이미지를 여기에 추가 -->
+        <div class="slide"><img src="slide1.jpg" alt="Slide 1"></div>
+        <div class="slide"><img src="slide2.jpg" alt="Slide 2"></div>
+        <div class="slide"><img src="slide3.jpg" alt="Slide 3"></div>
+    </div>
+</div>
+
+<script>
+    let currentIndex = 0;
+    const slides = document.getElementById('slides');
+    const totalSlides = slides.children.length;
+
+    // 슬라이드 위치 업데이트
+    function updateSlidePosition() {
+        slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+
+    // 키보드 이벤트 추가
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') { // 왼쪽 화살표
+            currentIndex--;
+            if (currentIndex < 0) currentIndex = totalSlides - 1;
+            updateSlidePosition();
+        } else if (e.key === 'ArrowRight') { // 오른쪽 화살표
+            currentIndex++;
+            if (currentIndex >= totalSlides) currentIndex = 0;
+            updateSlidePosition();
+        }
+    });
+
+    // 드래그 기능
+    let startX, isDragging = false;
+
+    slides.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.pageX - slides.offsetLeft;
+    });
+
+    slides.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - slides.offsetLeft;
+        const walk = (x - startX) * 0.5; // 드래그 속도 조절
+        slides.style.transform = `translateX(-${currentIndex * 100 - walk / slides.offsetWidth * 100}%)`;
+    });
+
+    slides.addEventListener('mouseup', (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        const x = e.pageX - slides.offsetLeft;
+        const walk = x - startX;
+        if (Math.abs(walk) > 50) { // 드래그 거리가 50px 이상일 때만 이동
+            currentIndex += walk > 0 ? -1 : 1;
+            if (currentIndex < 0) currentIndex = totalSlides - 1;
+            if (currentIndex >= totalSlides) currentIndex = 0;
+        }
+        updateSlidePosition();
+    });
+
+    slides.addEventListener('mouseleave', () => {
+        if (isDragging) {
+            isDragging = false;
+            updateSlidePosition();
+        }
+    });
+</script>
+</body>
+</html>
