@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PPT 슬라이드 쇼</title>
+    <!-- Swiper CSS CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
-        /* 기본 스타일 */
         body {
             margin: 0;
             padding: 0;
@@ -13,97 +14,57 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            font-family: Arial, sans-serif;
             background-color: #f0f0f0;
         }
-        .slideshow-container {
-            position: relative;
-            max-width: 800px;
-            width: 100%;
-            overflow: hidden;
+        .swiper {
+            width: 800px;
+            height: 100%;
         }
-        .slides {
+        .swiper-slide {
             display: flex;
-            transition: transform 0.5s ease;
+            justify-content: center;
+            align-items: center;
         }
-        .slide {
-            min-width: 100%;
-            box-sizing: border-box;
-        }
-        .slide img {
-            width: 100%;
-            height: auto;
+        .swiper-slide img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
         }
     </style>
 </head>
 <body>
-<div class="slideshow-container">
-    <div class="slides" id="slides">
-        <!-- PPT 캡처 이미지를 여기에 추가 -->
-        <div class="slide"><img src="slide1.jpg" alt="Slide 1"></div>
-        <div class="slide"><img src="slide2.jpg" alt="Slide 2"></div>
-        <div class="slide"><img src="slide3.jpg" alt="Slide 3"></div>
-    </div>
+<div class="swiper">
+    <div class="swiper-wrapper" id="slides"></div>
 </div>
 
+<!-- Swiper JS CDN -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
-    let currentIndex = 0;
-    const slides = document.getElementById('slides');
-    const totalSlides = slides.children.length;
+    const slideContainer = document.getElementById('slides');
+    const totalSlides = 10; // 슬라이드 개수 (필요한 만큼 수정)
 
-    // 슬라이드 위치 업데이트
-    function updateSlidePosition() {
-        slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+    // /ppt 폴더에서 이미지 동적 생성
+    for (let i = 1; i <= totalSlides; i++) {
+        const slide = document.createElement('div');
+        slide.className = 'swiper-slide';
+        const img = document.createElement('img');
+        img.src = `/ppt/slide${i}.png`; // /ppt/slide1.jpg, /ppt/slide2.jpg 등
+        img.alt = `Slide ${i}`;
+        slide.appendChild(img);
+        slideContainer.appendChild(slide);
     }
 
-    // 키보드 이벤트 추가
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft') { // 왼쪽 화살표
-            currentIndex--;
-            if (currentIndex < 0) currentIndex = totalSlides - 1;
-            updateSlidePosition();
-        } else if (e.key === 'ArrowRight') { // 오른쪽 화살표
-            currentIndex++;
-            if (currentIndex >= totalSlides) currentIndex = 0;
-            updateSlidePosition();
-        }
-    });
-
-    // 드래그 기능
-    let startX, isDragging = false;
-
-    slides.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        startX = e.pageX - slides.offsetLeft;
-    });
-
-    slides.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        const x = e.pageX - slides.offsetLeft;
-        const walk = (x - startX) * 0.5; // 드래그 속도 조절
-        slides.style.transform = `translateX(-${currentIndex * 100 - walk / slides.offsetWidth * 100}%)`;
-    });
-
-    slides.addEventListener('mouseup', (e) => {
-        if (!isDragging) return;
-        isDragging = false;
-        const x = e.pageX - slides.offsetLeft;
-        const walk = x - startX;
-        if (Math.abs(walk) > 50) { // 드래그 거리가 50px 이상일 때만 이동
-            currentIndex += walk > 0 ? -1 : 1;
-            if (currentIndex < 0) currentIndex = totalSlides - 1;
-            if (currentIndex >= totalSlides) currentIndex = 0;
-        }
-        updateSlidePosition();
-    });
-
-    slides.addEventListener('mouseleave', () => {
-        if (isDragging) {
-            isDragging = false;
-            updateSlidePosition();
-        }
+    // Swiper 초기화
+    const swiper = new Swiper('.swiper', {
+        loop: true, // 슬라이드가 끝나면 처음으로 돌아감
+        keyboard: {
+            enabled: true, // 키보드 화살표로 제어 가능
+        },
+        mousewheel: false, // 마우스 휠 비활성화 (필요하면 true로)
+        grabCursor: true, // 드래그 시 커서 모양 변경
+        slidesPerView: 1, // 한 번에 한 슬라이드만 보임
+        spaceBetween: 0, // 슬라이드 간 간격
     });
 </script>
-</body>
+</body>#
 </html>
