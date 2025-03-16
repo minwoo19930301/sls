@@ -6,6 +6,8 @@
     <title>PPT 슬라이드 쇼</title>
     <!-- Swiper CSS CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -13,46 +15,164 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            background-color: #f0f0f0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Noto Sans KR', sans-serif;
+            overflow: hidden;
         }
         .swiper {
-            width: 800px;
-            height: 100%;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
         }
         .swiper-slide {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            text-align: center;
+            padding: 40px;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: 100%;
+            position: relative;
         }
-        .swiper-slide img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
+        /* 모바일에서 90도 회전 (가로로 긴 뷰) */
+        @media (max-width: 768px) {
+            .swiper {
+                width: 100vh; /* 회전 후 실제 가로 길이 */
+                height: 100vw; /* 회전 후 실제 세로 길이 */
+                transform: rotate(90deg);
+                transform-origin: center center;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin-top: -50vw; /* 세로 길이의 절반으로 보정 */
+                margin-left: -50vh; /* 가로 길이의 절반으로 보정 */
+            }
+            .swiper-slide {
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+                width: 100vh; /* 회전 후 가로 길이 */
+                height: 100vw; /* 회전 후 세로 길이 */
+                transform: rotate(-90deg);
+                transform-origin: center center;
+            }
+            .title {
+                font-size: 5vw; /* 화면 크기에 비례 */
+            }
+            .subtitle {
+                font-size: 3vw;
+            }
+            .content h2 {
+                font-size: 4vw;
+            }
+            .content ol {
+                font-size: 1.5vw;
+            }
+            .qr-code img {
+                width: 10vw; /* 화면 크기에 비례 */
+                height: auto;
+            }
+        }
+        .title {
+            font-size: 3rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .subtitle {
+            font-size: 1.8rem;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+        .content {
+            font-size: 1.3rem;
+            color: #34495e;
+        }
+        .content h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        .content ol {
+            list-style-position: inside;
+            text-align: left;
+            font-size: 2rem;
+            padding-left: 0;
+        }
+        .qr-code {
+            position: fixed; /* 모든 슬라이드에 항시 표시 */
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .qr-code img {
+            width: 120px;
+            height: auto;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
 <body>
 <div class="swiper">
     <div class="swiper-wrapper" id="slides"></div>
+    <!-- 네비게이션 버튼 -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    <!-- 페이지네이션 -->
+    <div class="swiper-pagination"></div>
 </div>
 
 <!-- Swiper JS CDN -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
     const slideContainer = document.getElementById('slides');
-    const totalSlides = 10; // 슬라이드 개수 (slide1.png, slide2.png만 있으므로 2로 설정)
 
-    // ./ppt 폴더에서 이미지 동적 생성
-    for (let i = 1; i <= totalSlides; i++) {
-        const slide = document.createElement('div');
-        slide.className = 'swiper-slide';
-        const img = document.createElement('img');
-        img.src = `./ppt/slide${i}.png`; // 상대 경로로 수정
-        img.alt = `Slide ${i}`;
-        slide.appendChild(img);
-        slideContainer.appendChild(slide);
-    }
+    // 슬라이드 데이터
+    const slides = [
+        {
+            title: "누구나 돈 한푼 안 들이고 AI의 도움으로 업무를 대신 할 프로그램 만들기",
+            subtitle: "김민우",
+            qrCode: true
+        },
+        {
+            content: `
+                <h2>목차</h2>
+                <ol>
+                    <li>무료로 AI를 사용하는 방법</li>
+                    <li>서버 비용 없이 단순 프로그램 만드는 방법 소개</li>
+                    <li>개발자 에디터 웹에서 맛보기</li>
+                </ol>
+            `
+        }
+    ];
+
+    // 슬라이드 동적 생성
+    slides.forEach((slide, index) => {
+        const slideElement = document.createElement('div');
+        slideElement.className = 'swiper-slide';
+
+        if (slide.title && slide.subtitle) {
+            slideElement.innerHTML = `
+                <div class="title">${slide.title}</div>
+                <div class="subtitle">${slide.subtitle}</div>
+                ${slide.qrCode ? '<div class="qr-code"><img src="./ppt/qr.png" alt="QR Code"></div>' : ''}
+            `;
+        } else if (slide.content) {
+            slideElement.innerHTML = `<div class="content">${slide.content}</div><div class="qr-code"><img src="./ppt/qr.png" alt="QR Code"></div>`;
+        }
+
+        slideContainer.appendChild(slideElement);
+    });
 
     // Swiper 초기화
     const swiper = new Swiper('.swiper', {
@@ -61,6 +181,14 @@
         grabCursor: true,
         slidesPerView: 1,
         spaceBetween: 0,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
     });
 </script>
 </body>
