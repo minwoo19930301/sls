@@ -13,23 +13,30 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
             background-color: #f0f0f0;
         }
         .swiper {
-            width: 800px;
+            width: 100%;
             height: 100%;
+            overflow: hidden;
         }
         .swiper-slide {
             display: flex;
             justify-content: center;
             align-items: center;
+            /*width: 800px; !* 슬라이드 너비를 .swiper와 동일하게 설정 *!*/
+            height: 100%; /* 슬라이드 높이를 부모에 맞춤 */
+            padding: 0; /* 패딩 제거로 공간 최대화 */
         }
         .swiper-slide img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
+            max-width: 100%; /* 슬라이드 크기에 맞게 조정 */
+            max-height: 100%; /* 슬라이드 크기에 맞게 조정 */
+            width: 100%; /* 이미지를 슬라이드에 꽉 채우도록 */
+            height: 100%; /* 이미지를 슬라이드에 꽉 채우도록 */
+            object-fit: cover; /* 비율 유지하며 슬라이드를 꽉 채움 */
         }
+        /* 모바일 반응형 설정 */
+
     </style>
 </head>
 <body>
@@ -41,15 +48,17 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
     const slideContainer = document.getElementById('slides');
-    const totalSlides = 10; // 슬라이드 개수 (slide1.png, slide2.png만 있으므로 2로 설정)
+    const totalSlides = 24; // 슬라이드 개수 (slide-01.png부터 slide-24.png)
 
     // ./ppt 폴더에서 이미지 동적 생성
     for (let i = 1; i <= totalSlides; i++) {
         const slide = document.createElement('div');
         slide.className = 'swiper-slide';
         const img = document.createElement('img');
-        img.src = `./ppt/slide${i}.png`; // 상대 경로로 수정
-        img.alt = `Slide ${i}`;
+        // 파일 이름 형식을 01, 02, ... 24로 조정 (두 자리 수로 패딩)
+        const paddedIndex = i.toString().padStart(2, '0');
+        img.src = `./ppt/slide-${paddedIndex}.png`; // slide-01.png, slide-02.png, ... 형식
+        img.alt = `Slide ${paddedIndex}`;
         slide.appendChild(img);
         slideContainer.appendChild(slide);
     }
