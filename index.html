@@ -41,7 +41,7 @@
             z-index: 1000;
         }
         .qr-code img {
-            width: 120px;
+            width: 300px;
             height: auto;
             border: 2px solid #fff;
             border-radius: 5px;
@@ -89,7 +89,22 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
     const slideContainer = document.getElementById('slides');
-    const totalSlides = 24; // 슬라이드 개수 (slide-01.png부터 slide-24.png)
+    const totalSlides = 23; // 슬라이드 개수 (slide-01.png부터 slide-23.png)
+
+    // 슬라이드 번호와 링크 매핑 (Map 객체 사용)
+    const slideLinks = new Map([
+        ['02', 'https://wiki.gmarket.com/spaces/~minwokim/pages/302135481/%EA%B9%80%EB%AF%BC%EC%9A%B0%EC%9D%98+%ED%99%88'],
+        ['03', 'https://wiki.gmarket.com/spaces/~minwokim/pages/470791298/AI+%EB%AC%B4%EB%A3%8C%EB%A1%9C+%EC%93%B0%EB%8A%94+%EB%B0%A9%EB%B2%95%EB%93%A4'],
+        ['04', 'https://github.com/marketplace'],
+        ['05', 'https://lmstudio.ai/'],
+        ['08', 'https://lmarena.ai/'],
+        ['10', 'https://grok.com/'],
+        ['11', 'https://wiki.gmarket.com/spaces/~minwokim/pages/470793786/%EC%84%9C%EB%B2%84+%EC%97%86%EC%9D%B4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8+%EB%9D%84%EC%9A%B0%EB%8A%94+%EB%B0%A9%EB%B2%95'],
+        ['15', 'https://dev.gmarket.com/95'],
+        ['16', 'https://chromewebstore.google.com/category/extensions?utm_source=ext_sidebar&hl=ko'],
+        ['18', 'https://wiki.gmarket.com/spaces/~minwokim/pages/470791515/%EB%AC%B4%EB%A3%8C%EB%A1%9C+%EC%BD%94%EB%93%9C+%EC%97%90%EB%94%94%ED%84%B0+%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94+%EB%B0%A9%EB%B2%95%EB%93%A4'],
+        ['20', 'https://vscode.dev/?vscode-lang=ko-kr'],
+    ]);
 
     // ./ppt 폴더에서 이미지 동적 생성
     for (let i = 1; i <= totalSlides; i++) {
@@ -101,6 +116,12 @@
         img.src = `./ppt/slide-${paddedIndex}.png`; // slide-01.png, slide-02.png, ... 형식
         img.alt = `Slide ${paddedIndex}`;
         slide.appendChild(img);
+
+        if (slideLinks.has(paddedIndex)) {
+            slide.addEventListener('click', () => {
+                window.open(slideLinks.get(paddedIndex), '_blank');
+            });
+        }
         slideContainer.appendChild(slide);
     }
 
