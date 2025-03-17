@@ -24,7 +24,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /*width: 800px; !* 슬라이드 너비를 .swiper와 동일하게 설정 *!*/
             height: 100%; /* 슬라이드 높이를 부모에 맞춤 */
             padding: 0; /* 패딩 제거로 공간 최대화 */
         }
@@ -35,15 +34,57 @@
             height: 100%; /* 이미지를 슬라이드에 꽉 채우도록 */
             object-fit: cover; /* 비율 유지하며 슬라이드를 꽉 채움 */
         }
-        /* 모바일 반응형 설정 */
-
+        .qr-code {
+            position: fixed; /* 모든 슬라이드에 항시 표시 */
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .qr-code img {
+            width: 120px;
+            height: auto;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        /* 모바일 반응형 설정 및 가로 뷰 */
+        @media (max-width: 768px) {
+            .swiper {
+                width: 100vh; /* 회전 후 가로 길이 */
+                height: 100vw; /* 회전 후 세로 길이 */
+                transform: rotate(90deg);
+                transform-origin: center center;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin-top: -50vw; /* 세로 길이의 절반으로 보정 */
+                margin-left: -50vh; /* 가로 길이의 절반으로 보정 */
+            }
+            .swiper-slide {
+                width: 100vh; /* 회전 후 가로 길이 */
+                height: 100vw; /* 회전 후 세로 길이 */
+                transform: rotate(-90deg);
+                transform-origin: center center;
+            }
+            .qr-code {
+                bottom: auto; /* 회전 후 위치 조정 */
+                right: auto;
+                top: 20px; /* 왼쪽 위로 이동 */
+                left: 20px;
+            }
+            .qr-code img {
+                width: 0px; /* 모바일에서 QR 코드 크기 조정 */
+            }
+        }
     </style>
 </head>
 <body>
 <div class="swiper">
     <div class="swiper-wrapper" id="slides"></div>
 </div>
-
+<div class="qr-code">
+    <img src="./ppt/qr.png" alt="QR Code">
+</div>
 <!-- Swiper JS CDN -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
@@ -71,6 +112,57 @@
         slidesPerView: 1,
         spaceBetween: 0,
     });
+    // 모바일에서 터치 이벤트로 스와이프 감지
+    let touchStartY = 0;
+    let touchEndY = 0;
+
+    const handleTouchStart = (event) => {
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+            touchStartY = event.touches[0].clientY;
+        }
+    };
+
+    const handleTouchEnd = (event) => {
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+            touchEndY = event.changedTouches[0].clientY;
+            const deltaY = touchEndY - touchStartY;
+
+            // 밑에서 위로 스와이프 (다음 슬라이드로 이동)
+            if (deltaY < -50) {
+                swiper.slideNext();
+            }
+            // 위에서 밑으로 스와이프 (이전 슬라이드로 이동)
+            else if (deltaY > 50) {
+                swiper.slidePrev();
+            }
+        }
+    };
+
+    // 터치 이벤트 리스너 추가
+    document.querySelector('.swiper').addEventListener('touchstart', handleTouchStart);
+    document.querySelector('.swiper').addEventListener('touchend', handleTouchEnd);
+
+    // 모바일/데스크톱에 따라 터치 비율 및 방향 조정
+    const adjustSwiperDirection = () => {
+        const isMobile = window.innerWidth <= 768;
+
+        if (isMobile) {
+            swiper.params.touchRatio = 0; // 모바일에서 기본 스와이프 비활성화
+            swiper.params.direction = 'horizontal'; // 기본 방향 유지 (직접 구현)
+        } else {
+            swiper.params.touchRatio = 1; // 데스크톱에서 기본 스와이프 활성화
+            swiper.params.direction = 'horizontal'; // 데스크톱은 가로 스와이프
+        }
+
+        swiper.update();
+    };
+
+    adjustSwiperDirection();
+    window.addEventListener('resize', adjustSwiperDirection);
+    window.addEventListener('orientationchange', adjustSwiperDirection);
+
 </script>
 </body>
 </html>
