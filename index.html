@@ -36,12 +36,12 @@
         }
         .qr-code {
             position: fixed; /* 모든 슬라이드에 항시 표시 */
-            bottom: 20px;
-            right: 20px;
+            bottom: 10px;
+            right: 10px;
             z-index: 1000;
         }
         .qr-code img {
-            width: 300px;
+            width: 50%;
             height: auto;
             border: 2px solid #fff;
             border-radius: 5px;
@@ -89,7 +89,7 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
     const slideContainer = document.getElementById('slides');
-    const totalSlides = 23; // 슬라이드 개수 (slide-01.png부터 slide-23.png)
+    const totalSlides = 23; // 슬라이드 개수 (slide-01.png부터 slide-25.png)
 
     // 슬라이드 번호와 링크 매핑 (Map 객체 사용)
     const slideLinks = new Map([
@@ -99,12 +99,12 @@
         ['05', 'https://lmstudio.ai/'],
         ['08', 'https://lmarena.ai/'],
         ['10', 'https://grok.com/'],
-        ['11', 'https://wiki.gmarket.com/spaces/~minwokim/pages/470793786/%EC%84%9C%EB%B2%84+%EC%97%86%EC%9D%B4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8+%EB%9D%84%EC%9A%B0%EB%8A%94+%EB%B0%A9%EB%B2%95'],
-        ['15', 'https://dev.gmarket.com/95'],
-        ['16', 'https://chromewebstore.google.com/category/extensions?utm_source=ext_sidebar&hl=ko'],
-        ['18', 'https://wiki.gmarket.com/spaces/~minwokim/pages/470791515/%EB%AC%B4%EB%A3%8C%EB%A1%9C+%EC%BD%94%EB%93%9C+%EC%97%90%EB%94%94%ED%84%B0+%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94+%EB%B0%A9%EB%B2%95%EB%93%A4'],
-        ['20', 'https://vscode.dev/?vscode-lang=ko-kr'],
-        ['21', 'https://grok.com/share/bGVnYWN5_657d6072-c6be-4413-8f90-d17d88a69398']
+        ['12', 'https://wiki.gmarket.com/spaces/~minwokim/pages/470793786/%EC%84%9C%EB%B2%84+%EC%97%86%EC%9D%B4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8+%EB%9D%84%EC%9A%B0%EB%8A%94+%EB%B0%A9%EB%B2%95'],
+        ['17', 'https://dev.gmarket.com/95'],
+        ['18', 'https://chromewebstore.google.com/category/extensions?utm_source=ext_sidebar&hl=ko'],
+        ['20', 'https://wiki.gmarket.com/spaces/~minwokim/pages/470791515/%EB%AC%B4%EB%A3%8C%EB%A1%9C+%EC%BD%94%EB%93%9C+%EC%97%90%EB%94%94%ED%84%B0+%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94+%EB%B0%A9%EB%B2%95%EB%93%A4'],
+        ['22', 'https://vscode.dev/?vscode-lang=ko-kr'],
+        ['23', 'https://grok.com/share/bGVnYWN5_ebc677fc-cc12-4d58-8bd5-b1864608e456']
     ]);
 
     // ./ppt 폴더에서 이미지 동적 생성
