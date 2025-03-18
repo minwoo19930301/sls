@@ -24,18 +24,18 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100%; /* 슬라이드 높이를 부모에 맞춤 */
-            padding: 0; /* 패딩 제거로 공간 최대화 */
+            height: 100%;
+            padding: 0;
         }
         .swiper-slide img {
-            max-width: 100%; /* 슬라이드 크기에 맞게 조정 */
-            max-height: 100%; /* 슬라이드 크기에 맞게 조정 */
-            width: 100%; /* 이미지를 슬라이드에 꽉 채우도록 */
-            height: 100%; /* 이미지를 슬라이드에 꽉 채우도록 */
-            object-fit: cover; /* 비율 유지하며 슬라이드를 꽉 채움 */
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .qr-code {
-            position: fixed; /* 모든 슬라이드에 항시 표시 */
+            position: fixed;
             bottom: 10px;
             right: 10px;
             z-index: 1000;
@@ -47,33 +47,32 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
-        /* 모바일 반응형 설정 및 가로 뷰 */
         @media (max-width: 768px) {
             .swiper {
-                width: 100vh; /* 회전 후 가로 길이 */
-                height: 100vw; /* 회전 후 세로 길이 */
+                width: 100vh;
+                height: 100vw;
                 transform: rotate(90deg);
                 transform-origin: center center;
                 position: absolute;
                 top: 50%;
                 left: 50%;
-                margin-top: -50vw; /* 세로 길이의 절반으로 보정 */
-                margin-left: -50vh; /* 가로 길이의 절반으로 보정 */
+                margin-top: -50vw;
+                margin-left: -50vh;
             }
             .swiper-slide {
-                width: 100vh; /* 회전 후 가로 길이 */
-                height: 100vw; /* 회전 후 세로 길이 */
+                width: 100vh;
+                height: 100vw;
                 transform: rotate(-90deg);
                 transform-origin: center center;
             }
             .qr-code {
-                bottom: auto; /* 회전 후 위치 조정 */
+                bottom: auto;
                 right: auto;
-                top: 20px; /* 왼쪽 위로 이동 */
+                top: 20px;
                 left: 20px;
             }
             .qr-code img {
-                width: 0px; /* 모바일에서 QR 코드 크기 조정 */
+                width: 0px;
             }
         }
     </style>
@@ -89,9 +88,8 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
     const slideContainer = document.getElementById('slides');
-    const totalSlides = 25; // 슬라이드 개수 (slide-01.png부터 slide-25.png)
+    const totalSlides = 25;
 
-    // 슬라이드 번호와 링크 매핑 (Map 객체 사용)
     const slideLinks = new Map([
         ['02', 'https://wiki.gmarket.com/spaces/~minwokim/pages/302135481/%EA%B9%80%EB%AF%BC%EC%9A%B0%EC%9D%98+%ED%99%88'],
         ['03', 'https://wiki.gmarket.com/spaces/~minwokim/pages/470791298/AI+%EB%AC%B4%EB%A3%8C%EB%A1%9C+%EC%93%B0%EB%8A%94+%EB%B0%A9%EB%B2%95%EB%93%A4'],
@@ -99,7 +97,9 @@
         ['05', 'https://lmstudio.ai/'],
         ['08', 'https://lmarena.ai/'],
         ['10', 'https://grok.com/'],
+        ['11', 'https://clova-x.naver.com/'],
         ['12', 'https://wiki.gmarket.com/spaces/~minwokim/pages/470793786/%EC%84%9C%EB%B2%84+%EC%97%86%EC%9D%B4+%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8+%EB%9D%84%EC%9A%B0%EB%8A%94+%EB%B0%A9%EB%B2%95'],
+        ['16', 'https://www.google.com/search?q=%ED%85%8C%EC%8A%AC%EB%9D%BC+%EC%A3%BC%EA%B0%80&oq=%ED%85%8C%EC%8A%AC%EB%9D%BC+%EC%A3%BC%EA%B0%80'],
         ['17', 'https://dev.gmarket.com/95'],
         ['18', 'https://chromewebstore.google.com/category/extensions?utm_source=ext_sidebar&hl=ko'],
         ['20', 'https://wiki.gmarket.com/spaces/~minwokim/pages/470791515/%EB%AC%B4%EB%A3%8C%EB%A1%9C+%EC%BD%94%EB%93%9C+%EC%97%90%EB%94%94%ED%84%B0+%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94+%EB%B0%A9%EB%B2%95%EB%93%A4'],
@@ -107,14 +107,12 @@
         ['23', 'https://grok.com/share/bGVnYWN5_ebc677fc-cc12-4d58-8bd5-b1864608e456']
     ]);
 
-    // ./ppt 폴더에서 이미지 동적 생성
     for (let i = 1; i <= totalSlides; i++) {
         const slide = document.createElement('div');
         slide.className = 'swiper-slide';
         const img = document.createElement('img');
-        // 파일 이름 형식을 01, 02, ... 24로 조정 (두 자리 수로 패딩)
         const paddedIndex = i.toString().padStart(2, '0');
-        img.src = `./ppt/slide-${paddedIndex}.png`; // slide-01.png, slide-02.png, ... 형식
+        img.src = `./ppt/slide-${paddedIndex}.png`;
         img.alt = `Slide ${paddedIndex}`;
         slide.appendChild(img);
 
@@ -126,15 +124,24 @@
         slideContainer.appendChild(slide);
     }
 
-    // Swiper 초기화
     const swiper = new Swiper('.swiper', {
         loop: true,
         keyboard: { enabled: true },
         grabCursor: true,
         slidesPerView: 1,
         spaceBetween: 0,
+        on: {
+            slideChangeTransitionEnd: function () {
+                const realIndex = this.realIndex + 1; // 실제 슬라이드 인덱스 (1부터 시작)
+                if (realIndex === 12) {
+                    alert('일론 머스크가 설립한 AI 스타트업 xAI에서 개발한 최신 AI 챗봇으로, 2025년 2월에 공개되었으며, 특히 수학, 과학, 코딩 분야에서 뛰어난 성능을 자랑하는 이 모델의 이름은 무엇일까요?🤔');
+                } else if (realIndex === 20) {
+                    alert('크롬 브라우저에서 확장된 기능을 설치하여 다양한 작업을 도와주는 프로그램의 이름이 무엇일까요?🤔');
+                }
+            }
+        }
     });
-    // 모바일에서 터치 이벤트로 스와이프 감지
+
     let touchStartY = 0;
     let touchEndY = 0;
 
@@ -150,41 +157,32 @@
         if (isMobile) {
             touchEndY = event.changedTouches[0].clientY;
             const deltaY = touchEndY - touchStartY;
-
-            // 밑에서 위로 스와이프 (다음 슬라이드로 이동)
             if (deltaY < -50) {
                 swiper.slideNext();
-            }
-            // 위에서 밑으로 스와이프 (이전 슬라이드로 이동)
-            else if (deltaY > 50) {
+            } else if (deltaY > 50) {
                 swiper.slidePrev();
             }
         }
     };
 
-    // 터치 이벤트 리스너 추가
     document.querySelector('.swiper').addEventListener('touchstart', handleTouchStart);
     document.querySelector('.swiper').addEventListener('touchend', handleTouchEnd);
 
-    // 모바일/데스크톱에 따라 터치 비율 및 방향 조정
     const adjustSwiperDirection = () => {
         const isMobile = window.innerWidth <= 768;
-
         if (isMobile) {
-            swiper.params.touchRatio = 0; // 모바일에서 기본 스와이프 비활성화
-            swiper.params.direction = 'horizontal'; // 기본 방향 유지 (직접 구현)
+            swiper.params.touchRatio = 0;
+            swiper.params.direction = 'horizontal';
         } else {
-            swiper.params.touchRatio = 1; // 데스크톱에서 기본 스와이프 활성화
-            swiper.params.direction = 'horizontal'; // 데스크톱은 가로 스와이프
+            swiper.params.touchRatio = 1;
+            swiper.params.direction = 'horizontal';
         }
-
         swiper.update();
     };
 
     adjustSwiperDirection();
     window.addEventListener('resize', adjustSwiperDirection);
     window.addEventListener('orientationchange', adjustSwiperDirection);
-
 </script>
 </body>
 </html>
